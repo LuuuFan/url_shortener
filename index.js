@@ -5,7 +5,6 @@ const Koa = require('koa'),
 	  serve = require('koa-static'),
 	  keys = require('./config/keys'),
 	  mongoose = require('mongoose'),
-	  cors = require('koa2-cors'),
 	  app = new Koa(),
 	  views = require('koa-views');
 
@@ -13,9 +12,6 @@ mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true
 
 // logger
 app.use(logger());
-
-// vue dev
-app.use(cors());
 
 // koa body;
 app.use(koaBody());

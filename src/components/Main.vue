@@ -36,7 +36,7 @@
 			},
 			handleSubmit(){
 				if (this.checkValidURL()) {
-					fetch("http://localhost:9000/api/url", {
+					fetch("/api/url", {
 						method: "POST",
 						body: JSON.stringify({url: this.url.trim()}),
 						headers: {"Content-Type": "application/json"},

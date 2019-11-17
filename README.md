@@ -15,7 +15,8 @@ node index.js
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compiles front-end code and minifies for production
 ```
 npm run build
 ```
+### Comments and Assumption

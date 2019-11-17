@@ -1,11 +1,16 @@
-# url_shortener
+# URL Shortener
 
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Project run
+```
+node index.js
+```
+
+### Compiles and hot-reloads for front-end development
 ```
 npm run serve
 ```
@@ -14,11 +19,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

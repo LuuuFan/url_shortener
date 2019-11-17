@@ -2,8 +2,11 @@
 ![Screenshot](https://res.cloudinary.com/dq132990i/image/upload/v1573955465/ljulbxjemsqyhjknalcq.png)
 
 ## Tech Stack
-backend: node.js, framework: koa
-frontend: vue.js
+- Backend: [node.js](), [koa]()
+- Frontend: [vue.js]()
+- Database: [mongoDB]()
+	- mongoDB supports primary and secondary index, which is ideal for this application since query is needed on 2 columns (original URL and short code) separately.
+	- Use [mLab](https://mlab.com/) online mongoDB database for easier demonstration.
 
 ## Project setup
 ```
@@ -15,24 +18,47 @@ Server is running on PORT: 9000
 ```
 node index.js
 ```
-then open browser and visit: localhost:9000
+Then open browser and visit: localhost:9000
 
-### Compiles and hot-reloads for front-end development
-```
-npm run serve
-```
+Frontend HTML recomplied already for faster loading.
 
-### Compiles front-end code and minifies for production (front-end code has been already compiled and includes in the folder: dist)
-```
-npm run build
-```
+## URL Checking
+1. Consider same URL with no protocol or different protocols (like HTTP vs. HTTPS) as different URLs.
+2. If input URL doesn't include any protocol, will redirect to HTTPS by default.
 
-### Comments and Assumptions
-1. Considered that different protocol might redirect to different website, so the solution didn't handle protocol for urls. For example: if we input google.com, https://google.com and http://google.com, we will get diffrent tinyURL returned. 
-2. If the url inputed didn't include protocol, server will use https protocol for redirecting. 
-3. Because of the lack expierence for mock database, didn't mock database in the testing.
-4. When create new shorten url record to database, I used temporary solution which it generates short code first, then check if the short code already in the database. This solution has cons if the database records is geting bigger, it will slow down on reading database. 
-    There is another solution for generating uniq short code: Generate a big mount of uniq short code and save it as a shortCode table in the databse, get one from the table when create url, then delete it. This solution needs to come up with scale following up: needs to regenerate short codes once the shortCode table runs out of records.
-5. Use [mLab](https://mlab.com/) mongoDB database since it's easier for implementation.
-6. The product needs to include cache since it will be a heavy read application.
-7. No user handling since it didn't include in the requirements.
+## Unit Tests
+Unit tests cover
+1. Model: ORM to database schema.
+2. Util: Functions to create short code.
+3. Routes: Definition of frontend and backend interaction rules, which also test Controller.
+
+Note: Didn't use database mocking this time. In production code, database mocking is important to unit test to reduce test run time, environment dependencies and infrastructure code.
+
+## How to generarte short code
+
+### Not using hash
+Considered using hash to generate short code
+- Pros
+	- Can easily guarantee generated short code is unique
+	- Can reuse existing lib for hash function.
+- Cons
+	- To guarentee unique short code, short code generated is too long for tiny URL application.
+	- Hash functions generating unique output are expensive to call.
+
+### Solution implemented
+- Take all 26 English characters (case sensitive) and all 10 digits. Randomly generate short code of 6 chars. This will provide 62^6 ~=57 billion unique short codes, which should be enough for this homework. Also easy to extend to more chars if needed.
+- Store original URL and short code mapping in database.
+- To make sure short codes generated are unique, check database every time a short code is generated. If not unique, regenerated and check again.
+
+Note: This solution requires at least 1 database query on the mapping table per short code generated, which can be expensive in large scale. An improvement is proposed in future considerations.
+
+## Some Future Considerations
+
+### Improve short code generation performance at large scale
+- Create a separate table storing pre-generated unique short codes.
+- When a new short code is needed, simply get the first unused record from this table to use. Also mark the record in the table as "used" in a separate column.
+- Write batch job to delete "used" records periodically.
+- Write batch job to add more new short codes, if table is short on unused short codes.
+
+### Caching
+This application is very read intensive. To optimize performance, should add a caching layer between application server and database. This will reduce database read when querying for orginial URLs of short codes.

@@ -2,9 +2,9 @@
 ![Screenshot](https://res.cloudinary.com/dq132990i/image/upload/v1573955465/ljulbxjemsqyhjknalcq.png)
 
 ## Tech Stack
-- Backend: [node.js](), [koa]()
-- Frontend: [vue.js]()
-- Database: [mongoDB]()
+- Backend: [node.js](https://nodejs.org), [koa](https://koajs.com/)
+- Frontend: [vue.js](https://vuejs.org/)
+- Database: [mongoDB](https://www.mongodb.com/)
 	- mongoDB supports primary and secondary index, which is ideal for this application since query is needed on 2 columns (original URL and short code) separately.
 	- Use [mLab](https://mlab.com/) online mongoDB database for easier demonstration.
 
